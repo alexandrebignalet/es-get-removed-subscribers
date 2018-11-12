@@ -11,10 +11,11 @@ use PHPUnit\Framework\TestCase;
 
 final class ExpertSenderApiClientTest extends TestCase
 {
+    private $apiKey = 'npqHSIjt2l9enlHf2ZLk';
     private $rejectionReason = 'OptOutLink';
 
     public function testShouldReturnRemovedSubscribers(): void {
-        $client = new ExpertSenderApiClient(new Client(), getenv('ES_API_KEY'), getenv('ES_API_URL'));
+        $client = new ExpertSenderApiClient(new Client(), $this->apiKey);
         $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason);
 
         $this->assertInternalType('array', $removedSubscribers);
@@ -28,7 +29,7 @@ final class ExpertSenderApiClientTest extends TestCase
     }
 
     public function testShouldReturnRemovedSubscribersOfTodayByDefault() {
-        $client = new ExpertSenderApiClient(new Client(), getenv('ES_API_KEY'), getenv('ES_API_URL'));
+        $client = new ExpertSenderApiClient(new Client(), $this->apiKey);
         $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason);
 
         $startOfToday = new DateTime("now");
@@ -44,7 +45,7 @@ final class ExpertSenderApiClientTest extends TestCase
     }
 
     public function testShouldReturnAnArrayOfRemovedSubscribersWithTheReasonOfRejection() {
-        $client = new ExpertSenderApiClient(new Client(), getenv('ES_API_KEY'), getenv('ES_API_URL'));
+        $client = new ExpertSenderApiClient(new Client, $this->apiKey);
         $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason);
 
         /** @var RemovedSubscriber $removedSubscriber */
@@ -58,7 +59,7 @@ final class ExpertSenderApiClientTest extends TestCase
     {
         $httpClient = new Client();
         $apiClientMock = $this->getMockBuilder(ExpertSenderApiClient::class)
-            ->setConstructorArgs([$httpClient, '', ''])
+            ->setConstructorArgs([$httpClient, 'aMockedApiKey'])
             ->setMethods(['get'])
             ->getMock();
 

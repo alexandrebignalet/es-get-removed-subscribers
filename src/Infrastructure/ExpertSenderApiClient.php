@@ -50,10 +50,10 @@ class ExpertSenderApiClient {
         }, (array) $xmlObject);
     }
 
-    public function __construct(Client $httpClient, string $apiKey, string $apiUrl) {
+    public function __construct(Client $httpClient, string $apiKey) {
         $this->httpClient = $httpClient;
         $this->apiKey = $apiKey;
-        $this->apiUrl = $apiUrl;
+        $this->apiUrl = getenv('ES_API_URL');
     }
 
     private $apiUrl;

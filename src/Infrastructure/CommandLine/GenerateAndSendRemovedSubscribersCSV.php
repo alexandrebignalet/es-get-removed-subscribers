@@ -64,13 +64,12 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
      */
     private function createHandler($apiKey)
     {
-        $esApiUrl = getenv('ES_API_URL');
         $ftp_ip = 'ftp.cluster021.hosting.ovh.net';
         $username = 'expertsegb-alex';
         $password = 'UhJ746YHr4';
 
         $httpClient = new Client();
-        $esApiClient = new ExpertSenderApiClient($httpClient, $apiKey, $esApiUrl);
+        $esApiClient = new ExpertSenderApiClient($httpClient, $apiKey);
         $ftpClient = new FTPClient($ftp_ip, $username, $password);
         $csvWriter = new CSVWriter();
         $removedSubscribersService = new RemovedSubscriberService($esApiClient);

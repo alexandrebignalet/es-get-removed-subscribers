@@ -1,5 +1,1 @@
 ES_API_URL='https://api3.esv2.com/v2/Api'
-ES_API_KEY=''
-FTP_SERVER_IP=''
-FTP_USER_NAME=''
-FTP_USER_PASS=''
