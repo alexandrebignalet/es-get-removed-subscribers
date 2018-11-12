@@ -1,0 +1,15 @@
+{
+  "name": "es-get-removed-subscribers",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit --verbose --color -c phpunit.dist.xml tests",
+    "test:watch": "watch 'npm run --silent test' .",
+    "composer:update": "docker exec -it es-docker_php_1 bash -c \"cd /home/expertsender/get-removed-subscribers; composer update\"",
+    "composer:install": "docker exec -it es-docker_php_1 bash -c \"cd /home/expertsender/get-removed-subscribers; composer install\""
+  }
+}

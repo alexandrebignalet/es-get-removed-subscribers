@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use App\Infrastructure\CommandLine\GenerateAndSendRemovedSubscribersCSV;
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotenv = new Dotenv();
+$dotenv->load('.env/prod');
+
+$app = new Application('ES - Get Removed Subscribers', 'v1');
+$app->add(new GenerateAndSendRemovedSubscribersCSV());
+$app->run();
