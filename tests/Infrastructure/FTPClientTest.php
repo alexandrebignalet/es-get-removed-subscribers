@@ -14,16 +14,15 @@ class FTPClientTest extends TestCase {
     private $ftpClient;
 
     public function setUp() {
-        $ftp_ip = 'ftp.cluster021.hosting.ovh.net';
-        $username = 'expertsegb-alex';
-        $password = 'UhJ746YHr4';
+        $ftp_ip = getenv('FTP_DOMAIN');
+        $username = getenv('FTP_USERNAME');
+        $password = getenv('FTP_PASSWORD');
         $this->ftpClient = new FTPClient($ftp_ip, $username, $password);
     }
     public function tearDown() {
         $this->ftpClient->delete($this->createdFileName);
     }
 
-    /** @throws ErrorException */
     public function testShouldConnectAndLoginWithGivenInfos() {
         $removedSubscribers = [
             new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['OptOutLink']),
