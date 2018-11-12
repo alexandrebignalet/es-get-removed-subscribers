@@ -10,6 +10,7 @@
     "test": "vendor/bin/phpunit --verbose --color -c phpunit.dist.xml tests",
     "test:watch": "watch 'npm run --silent test' .",
     "composer:update": "docker exec -it es-docker_php_1 bash -c \"cd /home/expertsender/get-removed-subscribers; composer update\"",
+    "phpunit": "docker exec -it es-docker_php_1 bash -c \"cd /home/expertsender/get-removed-subscribers; vendor/bin/phpunit\"",
     "composer:install": "docker exec -it es-docker_php_1 bash -c \"cd /home/expertsender/get-removed-subscribers; composer install\""
   }
 }
