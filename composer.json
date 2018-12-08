@@ -25,7 +25,8 @@
     "require": {
         "guzzlehttp/guzzle": "^5.3.3",
         "league/csv": "^9.1.4",
-        "symfony/console": "^4.1"
+        "symfony/console": "^4.1",
+        "ext-ftp": "*"
     },
     "scripts": {
         "post-install-cmd": "cp .env/dist .env/test"

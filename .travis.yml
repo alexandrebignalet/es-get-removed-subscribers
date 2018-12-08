@@ -1,5 +1,8 @@
 language: php
-install: composer install
+sudo: required
+install:
+- sudo apt-get update --option Acquire::Retries=100 --option Acquire::ftp::Timeout="300"
+- composer install
 php:
 - nightly
 env:

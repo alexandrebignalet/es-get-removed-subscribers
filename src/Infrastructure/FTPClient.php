@@ -27,7 +27,7 @@ class FTPClient {
      * @throws \ErrorException
      */
     public function __construct(string $ftp_ip, string $username, string $password) {
-        $this->conn = ftp_connect($ftp_ip);
+        $this->conn = @ftp_connect($ftp_ip);
 
         if (!$this->conn) {
             throw new \ErrorException('Connection failed');
