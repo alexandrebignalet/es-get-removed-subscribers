@@ -9,12 +9,18 @@ use App\Infrastructure\ExpertSenderApiClient;
 class RemovedSubscriberService {
     private const removeTypes = ['OptOutLink', 'Ui', 'BounceLimit', 'Complaint', 'UserUnknown', 'Api'];
 
-    public function getRemovedSubscribers($rejectionReasons = null) {
+    /**
+     * @param array $rejectionReasons
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return array
+     */
+    public function getRemovedSubscribers($rejectionReasons = null, $startDate = null, $endDate = null) {
         $rejectionReasons = $rejectionReasons ? $rejectionReasons : RemovedSubscriberService::removeTypes;
         $removedSubscribers = [];
 
         foreach ($rejectionReasons as $rejectionReason) {
-            $byRejectionReason = $this->apiClient->getRemovedSubscribersByRejectionReason($rejectionReason);
+            $byRejectionReason = $this->apiClient->getRemovedSubscribersByRejectionReason($rejectionReason, $startDate, $endDate);
             $removedSubscribers = $this->mergeRemovedSubscribers($removedSubscribers, $byRejectionReason);
         }
 

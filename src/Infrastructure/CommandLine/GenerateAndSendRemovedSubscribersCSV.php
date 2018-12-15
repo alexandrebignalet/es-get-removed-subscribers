@@ -28,6 +28,8 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
                     new InputOption('customer-name', 'cn', InputOption::VALUE_REQUIRED, 'The name of the customer responsible.'),
                     new InputOption('path', 'p', InputOption::VALUE_OPTIONAL, 'The path storage on the FTP server.'),
                     new InputOption('rejection-reasons', 'rr', InputOption::VALUE_OPTIONAL, 'The rejection reasons to match.'),
+                    new InputOption('start-date', 'sd', InputOption::VALUE_OPTIONAL, 'From when start fetching.'),
+                    new InputOption('end-date', 'ed', InputOption::VALUE_OPTIONAL, 'To when end fetching.')
                 ])
             );
     }
@@ -53,7 +55,9 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
         return new GenerateRemovedSubscribersCSVCommand(
             $input->getOption('customer-name'),
             $input->getOption('path'),
-            $input->getOption('rejection-reasons')
+            $input->getOption('rejection-reasons'),
+            $input->getOption('start-date'),
+            $input->getOption('end-date')
         );
     }
 

@@ -39,11 +39,10 @@ class CSVWriter {
         return $this->generate($headers, $records, $path);
     }
 
-    public function createFile(array $removedSubscribers, string $clientName) {
-        $filename = $clientName . 'removed-' . (new \DateTime("now"))->format('dmY') . '.csv';
+    public function createFile(array $removedSubscribers, string $fileName) {
 
-        $this->generateRemovedSubscribersCSV($removedSubscribers, $filename);
+        $this->generateRemovedSubscribersCSV($removedSubscribers, $fileName);
 
-        return $filename;
+        return $fileName;
     }
 }

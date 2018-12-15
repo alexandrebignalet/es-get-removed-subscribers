@@ -3,16 +3,31 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
+use App\Domain\RemovedSubscriber;
+
 class FTPClient {
 
-    public function put($path, $fileName) {
+    public function put($fileName) {
         ftp_pasv($this->conn, true);
-
-        ftp_chdir($this->conn, $path);
 
         ftp_put($this->conn, $fileName, $fileName, FTP_ASCII);
 
         return unlink($fileName);
+    }
+
+    public function getRemovedSubscribersFromFile($path, $fileName) {
+        ftp_pasv($this->conn, true);
+
+        ftp_chdir($this->conn, $path);
+
+        $data = [];
+        ob_start();
+        if(ftp_get($this->conn, 'php://output', $fileName, FTP_ASCII)) {
+            $fileData = ob_get_contents();
+            $data = $this->csvStringToRemoveSuscribers($fileData);
+        }
+        ob_end_clean();
+        return $data;
     }
 
     public function delete($remoteFilePath) {
@@ -39,5 +54,24 @@ class FTPClient {
         ftp_close($this->conn);
     }
 
-    private $conn;
+    public $conn;
+
+    /**
+     * @param $fileData
+     * @return array
+     */
+    public function csvStringToRemoveSuscribers($fileData): array
+    {
+        $csvRows = preg_split('/\n/', $fileData);
+
+        array_shift($csvRows);
+        array_pop($csvRows);
+
+        $existingRemoveSubscribers = array_map(function ($row) {
+            $args = preg_split('/,/', $row);
+            return new RemovedSubscriber(null, $args[1], null, \DateTime::createFromFormat('d/m/Y', $args[0]), preg_split('/,/', $args[2]));
+        }, $csvRows);
+
+        return $existingRemoveSubscribers;
+    }
 }

@@ -9,14 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 final class CSVWriterTest extends TestCase {
 
-    private $createdFilePath;
-
-    public function tearDown() {
-        if ($this->createdFilePath) {
-            unlink($this->createdFilePath);
-        }
-    }
-
     public function testShouldContainsColumnsGiven() {
 
         $expectedHeaders = ['Date', 'Email', 'Raison'];
@@ -77,9 +69,11 @@ final class CSVWriterTest extends TestCase {
         ];
 
         $csvWriter = new CSVWriter();
-        $this->createdFilePath = '' . 'acheterlouerremoved-' . (new \DateTime("now"))->format('dmY') . '.csv';
-        $csvWriter->createFile($removedSubscribers, 'acheterlouer');
+        $fileName = '' . 'acheterlouerremoved-' . (new \DateTime("now"))->format('dmY') . '.csv';
+        $csvWriter->createFile($removedSubscribers, $fileName);
 
-        $this->assertFileExists($this->createdFilePath);
+        $this->assertFileExists($fileName);
+
+        unlink($fileName);
     }
 }

@@ -10,12 +10,17 @@ class ExpertSenderApiClient {
 
     /**
      * @param $rejectionReason
-     * @param null $startDate
-     * @param null $endDate
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
      * @return RemovedSubscriber[]
      */
     public function getRemovedSubscribersByRejectionReason($rejectionReason, $startDate = null, $endDate = null): array {
         $today = (new \DateTime('now'))->format('Y-m-d');
+        if($startDate) $startDate = $startDate->format('Y-m-d');
+        if($endDate) $endDate = $endDate->format('Y-m-d');
+        if($startDate && !$endDate) {
+            $endDate = $startDate;
+        }
 
         $queryParams = [
             'apiKey' => $this->apiKey,
