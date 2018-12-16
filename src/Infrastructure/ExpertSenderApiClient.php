@@ -16,7 +16,7 @@ class ExpertSenderApiClient {
      * @return RemovedSubscriber[]
      * @throws \Exception
      */
-    public function getRemovedSubscribersByRejectionReason($rejectionReason, $startDate = null, $endDate = null): array {
+    public function getRemovedSubscribersByRejectionReason($rejectionReason, $startDate, $endDate = null): array {
         $endDate = $endDate ? $endDate->format('Y-m-d') : $startDate;
 
         $queryParams = [

@@ -16,7 +16,7 @@ final class ExpertSenderApiClientTest extends TestCase
 
     public function testShouldReturnRemovedSubscribers(): void {
         $client = new ExpertSenderApiClient(new Client(), $this->apiKey);
-        $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason);
+        $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason, new \DateTimeImmutable());
 
         $this->assertInternalType('array', $removedSubscribers);
 
@@ -30,7 +30,7 @@ final class ExpertSenderApiClientTest extends TestCase
 
     public function testShouldReturnRemovedSubscribersOfTodayByDefault() {
         $client = new ExpertSenderApiClient(new Client(), $this->apiKey);
-        $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason);
+        $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason, new \DateTimeImmutable());
 
         $startOfToday = new DateTime("now");
         $startOfToday->setTime(0, 0, 0);
@@ -46,7 +46,7 @@ final class ExpertSenderApiClientTest extends TestCase
 
     public function testShouldReturnAnArrayOfRemovedSubscribersWithTheReasonOfRejection() {
         $client = new ExpertSenderApiClient(new Client, $this->apiKey);
-        $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason);
+        $removedSubscribers = $client->getRemovedSubscribersByRejectionReason($this->rejectionReason, new \DateTimeImmutable());
 
         /** @var RemovedSubscriber $removedSubscriber */
         foreach ($removedSubscribers as $key => $removedSubscriber) {
@@ -65,7 +65,7 @@ final class ExpertSenderApiClientTest extends TestCase
 
         $apiClientMock->expects($this->exactly(1))->method('get')->willReturn([]);
 
-        $resources = $apiClientMock->getRemovedSubscribersByRejectionReason($this->rejectionReason);
+        $resources = $apiClientMock->getRemovedSubscribersByRejectionReason($this->rejectionReason, new \DateTimeImmutable());
         $this->assertEquals($resources, []);
     }
 }
