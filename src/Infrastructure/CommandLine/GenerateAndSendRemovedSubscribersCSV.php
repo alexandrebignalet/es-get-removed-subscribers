@@ -43,7 +43,9 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
             $command = $this->deserializeInput($input);
             $handler->handle($command);
 
-        } catch (\ErrorException $e) {
+            $output->writeln('Done.');
+
+        } catch (\Exception $e) {
             $output->writeln($e->getMessage());
             $output->writeln('Existing due to error...');
             exit;

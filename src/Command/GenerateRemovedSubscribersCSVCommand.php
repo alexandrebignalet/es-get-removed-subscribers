@@ -58,14 +58,14 @@ class GenerateRemovedSubscribersCSVCommand {
 
     public function startDate() {
         if($this->startDate)
-            return \DateTime::createFromFormat('d/m/Y', $this->startDate);
+            return \DateTimeImmutable::createFromFormat('d/m/Y', $this->startDate);
 
         return $this->startDate;
     }
 
     public function endDate() {
         if($this->endDate)
-            return \DateTime::createFromFormat('d/m/Y', $this->endDate);
+            return \DateTimeImmutable::createFromFormat('d/m/Y', $this->endDate);
 
         return $this->endDate;
     }

@@ -4,4 +4,6 @@
 
 vendor/
 node_modules/
-ftp/
+
+logs/get-removed-subscribers.log
+deploy_key

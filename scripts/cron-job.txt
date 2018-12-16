@@ -1,1 +1,0 @@
-* * * * * /home/expertsender/get-removed-subscribers/scripts/deploy.sh

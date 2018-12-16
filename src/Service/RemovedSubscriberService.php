@@ -14,6 +14,7 @@ class RemovedSubscriberService {
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      * @return array
+     * @throws \Exception
      */
     public function getRemovedSubscribers($rejectionReasons = null, $startDate = null, $endDate = null) {
         $rejectionReasons = $rejectionReasons ? $rejectionReasons : RemovedSubscriberService::removeTypes;

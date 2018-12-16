@@ -5,27 +5,24 @@ namespace App\Infrastructure;
 
 use App\Domain\RemovedSubscriber;
 use GuzzleHttp\Client;
+use SimpleXMLElement;
 
 class ExpertSenderApiClient {
 
     /**
      * @param $rejectionReason
-     * @param \DateTime $startDate
-     * @param \DateTime $endDate
+     * @param \DateTimeImmutable $startDate
+     * @param \DateTimeImmutable $endDate
      * @return RemovedSubscriber[]
+     * @throws \Exception
      */
     public function getRemovedSubscribersByRejectionReason($rejectionReason, $startDate = null, $endDate = null): array {
-        $today = (new \DateTime('now'))->format('Y-m-d');
-        if($startDate) $startDate = $startDate->format('Y-m-d');
-        if($endDate) $endDate = $endDate->format('Y-m-d');
-        if($startDate && !$endDate) {
-            $endDate = $startDate;
-        }
+        $endDate = $endDate ? $endDate->format('Y-m-d') : $startDate;
 
         $queryParams = [
             'apiKey' => $this->apiKey,
-            'startDate' => $startDate ?: $today,
-            'endDate' => $endDate ?: $today,
+            'startDate' => $startDate->format('Y-m-d'),
+            'endDate' => $endDate->format('Y-m-d'),
             'removeTypes' => $rejectionReason
         ];
 
@@ -46,6 +43,7 @@ class ExpertSenderApiClient {
         $removedSubscribersXmlArray = $response->xml()->Data->RemovedSubscribers;
 
         $xmlResources = $this->xmlToArray($removedSubscribersXmlArray);
+
         return array_key_exists($resourceName, $xmlResources) ? $xmlResources[$resourceName] : [];
     }
 

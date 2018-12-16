@@ -15,17 +15,21 @@ use App\Service\RemovedSubscriberService;
 
 class CreateRemovedSubscribersCSVCommandHandler {
 
+    /**
+     * @param GenerateRemovedSubscribersCSVCommand $command
+     * @throws \Exception
+     */
     public function handle(GenerateRemovedSubscribersCSVCommand $command) {
-        $startDate = $command->startDate();
-        $previousPossibleDateFileGeneration = $command->startDate()->modify('-1 day');
+        $newGenerationDate = $command->startDate() ? $command->startDate() : new \DateTimeImmutable();
+        $previousPossibleDateFileGeneration = $newGenerationDate->modify('-1 day');
 
-        $newFileName = $command->customerName() . 'removed-' . $startDate->format('dmY') . '.csv';
+        $newFileName = $command->customerName() . 'removed-' . $newGenerationDate->format('dmY') . '.csv';
         $previousFileName = $command->customerName() . 'removed-' . $previousPossibleDateFileGeneration->format('dmY') . '.csv';
 
         $existingRemovedSubscribersFromFile =  $this->ftpClient->getRemovedSubscribersFromFile($command->path(), $previousFileName);
         $newRemovedSubscribersFromApi = $this->removedSubscribersService->getRemovedSubscribers(
             $command->rejectionReasons(),
-            $command->startDate(),
+            $newGenerationDate,
             $command->endDate()
         );
 
