@@ -1,7 +1,12 @@
 language: php
+sudo: false
 
-php:
-- nightly
+php: 7.1
+
+
+cache:
+  directories:
+  - $HOME/.composer/cache
 
 env:
   global:
@@ -23,9 +28,9 @@ before_install:
 
 install: composer install
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: ./release.sh
-  on:
-    branch: master
+jobs:
+  include:
+  # On master: build Docker image and deploy to ECS
+  - stage: push
+    if: branch = master AND type = push
+    script: ./release.sh
