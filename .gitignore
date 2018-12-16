@@ -1,6 +1,4 @@
-.env/test
-.env/prod
-.env/dev
+
 
 vendor/
 node_modules/

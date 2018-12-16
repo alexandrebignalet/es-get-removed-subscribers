@@ -27,5 +27,4 @@ RUN composer install --no-scripts --no-autoloader --no-dev --no-interaction
 
 # add the rest of the code
 COPY . .
-RUN composer dump-autoload --optimize && \
-	composer run-script post-install-cmd
+RUN composer dump-autoload --optimize
