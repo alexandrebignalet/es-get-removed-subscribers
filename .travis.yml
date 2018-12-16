@@ -1,21 +1,31 @@
 language: php
-install: composer install
+
 php:
 - nightly
+
 env:
   global:
   - SERVER_IP_ADDRESS=178.62.34.95
+  - DEPLOY_DIR=/home/git/es-get-removed-subscribers
   matrix:
   - secure: xkPk/Og2x1K/6QiwnyKVfDgrmPOl0fqeInv/yDZBAIa/Y8bh7zDkw4ZYqqxegfqokGOST10H1ArVaEwIi6VwxaUT3xOOeipv1XCI3Pt7hBQ+6HWkp7Bw/DEBsPUwdwItHrzOVcvZlulxqo3jVTEnR/aDy5MdgsxwZiv+fWh36Pz9cktgW+ImsKGhnJgzGtpY0WWdFMRXHZ3Y8WoyE0Z9YkaJOOTYJJTRcgPmhxb3XIySRZR4r/5CCtEAdA+aHw4Cz3hmuWpHdHNS9Ry8tHEo3l0KFw1SXGwojQiH8UdhOYKHkrmwf9bw2uWWyDlV/rCbbuxGRjaFokmKt/Un88sq1dEqnJEPQyaIYTvaRtugNypZhMneekdP+26Tt2yDq6e4MjhlZXd8M4p9nSaD/O/4/jbchFLhyAJsHDxNZDuy53gOCuRHete4rPuE7ukx8MFr596Qdygt9xNDPwBZhScWfRrRGwSSpomfl/OwhD0MOC4nbMgWvk2ZsTwCFyls1btwihBSxKO6SXEjm+vRl6z3eLZaNMvHdEujftxgZFLn3TMhmYCAlf0b8tvLyjpL3YjP6jV20e3IZdDy2J4D5Os6vZhe29x8aE0GmLt+ISPA+dwAgfOvtgaUh0hDFYphW3k5MnpR4CEMG6/fpWeh/bbn/iCK1eBkr4tyHMKHD2gofGw=
   - secure: gcAzOtZLfe+vVIwiQX4TstaQ334KA2UtwKVqljZ06D3ZOUt6FrClS4NRMNrUTHuL9tZVfq2pMkVCUVqlDxK1f8b82veB1nrl9gDmoQJdHh0Cg+RVomJDpHGv+pIad5/YoFrPV7M++DMP21Umi/gp1TnQW5DFfSPyxORY6XAh/pDLmhsp1qRCq2MxaapvM8mEZv+nHuLuGIYEvrdkoSV3ktEwk41HJLSxiQJHjrs8vmfcGmn24I+fBL3ZjOdTcNnEsRB99Zl3KRLLEauQwDmIBHikWCmtZsFVpiRj9oxqTTbYzSxJz8+u4YldK/xYUvGDvz0AmaPllAg9qSeRt5vnTejWZInpP4Uzz8AE9GPgynhLfLYBt4mg+Mid1oue0cZGUt/Xq2VcSc9v06fElcMNAUKiM4GCSrQZhj3sfHE1ROTROpwjP8UXNLoLe9SvxMOhVhRiaURJjpX6/JIplKgzwQ4/fxzcEyutp7PuiH0Gne8n+CZMBI6aCzs8qBL9NeKtjxhBzoSDEqqgJF6bBqIbkorLZZPxGgRn/YrHV7fSXS82tE7rC0NDZI9M7xGi0n4uOipIuXpKpJe1THh+SX9m4sDcA7Tyxn6dRljfa/PW6XjrXerl6AViruK3JTYeJzKXgsn1NonSd2W3AMI1ZIsl71+QcoUaveSgW22M4O4SfR8=
   - secure: xqcofcq5nLAu5op0iZDLplgrG8TsIpjHDbTjSa0PaCYMHoTVXAbKptUHQWJ+a5UWDuqHth2AHNdstRW5N+GXbvwoxWAl/5igQMiX8NV5fQXfgtzbZB/neNndSCytBBHbPjqGdhswgkAa962E8vhdI1EKw1mvLefBpZA2O6mo/uHrapj1kOnBZTc4lxHcSfRrZyTULpgKTurPpLAjXTIrUsyquXz5ZB2kv6mqbuwHlakBgeCtrNvdEU/sYXiAKv7W1rh00orm5D4ZMD6mnZ1lqLC1WGmcZrlLQcc9tzqllBKd7xloob//3t2nP55ZXP4UVs3xKlwl4Gi1UiUnAhuB7RE92si+d6RxXyx86vVK+ZIcTV3sKLDLKV1jU2MifOuB29LZ6YjKeBk/Ct+pjGLWDL4z+OFdpqsWAYbIM3lLsHmfS+EuijgIM506oY/I9JFaybHJM154uDiC5shDkCUZSAqVFFDmUkFS2y5gzqsrCcuw434pdj4RKe1kZKSXevB+WB6/QTKL0ncBw7xSB4h60CBa9SNIQueUXT3DDYQwTx0c81kkASDz3D/2wW8eWV9UAYEEr+pXld2ZO3lKZS7jdazgls2K7Z23yO7KgiuCpQHQs/ZzoUECf2FDsxZITlT04heZ6rOZ9JUgaHUejIROgdz8NvYhEwtuByeBtE+ATlo=
-addons:
-  ssh_known_hosts: $SERVER_IP_ADDRESS
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_dc9d850b4010_key -iv $encrypted_dc9d850b4010_iv
-  -in deploy_key.enc -out ./tmp/deploy_key -d
+  -in deploy_key.enc -out ./deploy_key -d
 - eval "$(ssh-agent -s)"
-- chmod 600 ./tmp/deploy_key
-- ssh-add ./tmp/deploy_key
-- ssh -i ./tmp/deploy_key git@$SERVER_IP_ADDRESS pwd
+- chmod 600 ./deploy_key
+- echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- ssh-add ./deploy_key
+- ssh -i ./deploy_key git@$SERVER_IP_ADDRESS pwd
+
+install: composer install
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./release.sh
+  on:
+    branch: master
