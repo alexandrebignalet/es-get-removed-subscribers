@@ -20,7 +20,7 @@ class CreateRemovedSubscribersCSVCommandHandler {
      * @throws \Exception
      */
     public function handle(GenerateRemovedSubscribersCSVCommand $command) {
-        $newGenerationDate = $command->startDate() ? $command->startDate() : new \DateTimeImmutable();
+        $newGenerationDate = $command->startDate() ? $command->startDate() : (new \DateTimeImmutable())->modify('-1 day');
         $previousPossibleDateFileGeneration = $newGenerationDate->modify('-1 day');
 
         $newFileName = $command->customerName() . 'removed-' . $newGenerationDate->format('dmY') . '.csv';
