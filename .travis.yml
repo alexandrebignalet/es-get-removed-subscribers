@@ -1,27 +1,21 @@
 language: php
 sudo: false
-
 php: 7.1
-
-
 cache:
   directories:
-  - $HOME/.composer/cache
-
+  - "$HOME/.composer/cache"
 env:
   global:
   - SERVER_IP_ADDRESS=178.62.34.95
   - DEPLOY_DIR=/home/git/es-get-removed-subscribers
-
+  matrix:
+  - secure: NU3glOjON6a+wVJeQ4qHXUIgGI15KF46WnjL1gQmFwqU0x6up3rw8lMhJ/+M2ghQE6TAety5RT8dqGXDxlNi83SUjv1c8M0FX//R7riAmUFD9VerV538kQL6KwhM2+mdPmaJbZFwBARKRueHgzplaUxPMAlVU/LgDS9gXWleyJ4OcBxIhdrlQU+TrmfEWq291/bJgvzt83bMjBqn3oXo8+a871XgFjE7MNdTnaURbnumoHVj/5YuEnS8KiAya8QrnfIaBTrE3SKzoz6iKX0xO4lVOOuS0giKJ44RhHizWebvP2mNFBfRJ4D9hv+HsY5YDl3T0CNfZj8v3cQ3eIeAOq6AS0Eby/b2BtpHIdiNQc88zlvPq2/xJxDiGap/wMcdvB7/DOtWzWgRGk3qE43M8UhfQk/AC2CWzRhw/iYDP84UqLrBBmkewtjTrn4cN7iYIVSobfcU0DHbWKvvfiaZIbt9iS8twWkXbI/ZkLdyyZol9MvP/A631sD2hEGJ8NwkP4TSm8yInxe0ZAhRxza3vMmGnKx/ESrk/M5ajRLbqUPyNO+QNchSYI9mWtAKsAN6LQC+Qq1uYHMSJzoitEpEtkMTd+tdC9f0LUz7qVs+4YlVVB7bk+LzDOJMwFCw3A19dRXDcxBBJ0Xy9w6mQQO/Yx3x4Zab0eCt7K00c/QHgwg=
+  - secure: Kuw2A1MhxzPBS65xH3HQdVS0sCOm5huQ81SlZ6t2LoPvTT2D+ayBlYWECEXRc37Ltb3/q4JP0BTrvGb6JGj0E1wHGUoPIjX+m4/fgi5dJJbTUUgCtSqR1QmidB8kwg3erHV0BG4Qlct50w0Yeraco2+7gYrMIRErFWk1TpRe4TXkUMkrKbmrlJLZeh0ckaTCyR2aTOisHnlpzsOzB3wACV+X+ejBOKwTMC8Fc9boXt8sWDQ2sRn/0d8hx/OFDygZjkRLsIFbn4EYo0Ff/ZeBwjQuwb37Ence6a1jTrPMd7J+8eTb5WGjqqcvIrIiwM7iR413ZfIOd8/qsJVQlxP3qeFiOZ+xjclQXPnt5l0ykRr9FZUgP31geL6+lS4rTLj3CDFMj9k72+a6jTbIDbhHfbIapOmrfQxnm3A2ZdbSoSWsevsKiI5stvhekPAgjItsTxX5Ynb0MgKNOPzgie1aGDyvzNwtaKs0/d678dfDNxnASQRD2oCkRVWpaWkpxthnfJx48L0iNN3hcwSJQ1JPn9KJ44QUnOYx7RumA2tXj6KLQ51oD1iTRlGjyMBrMo7/BfXcf5jHzIPOf2VVXc8Uxq3eekZE7cFTxWlQ88k1Y891akq0jiJKjFav7ZTcwjaNIFWHMXUxg/ahbdQ6IKUuyl05RSxs1kmYOu0vHyuDrbk=
 install: composer install
-
 jobs:
   include:
-  # Always build and test
   - stage: build
-    script: $TRAVIS_BUILD_DIR/vendor/bin/phpunit
-
-  # On master: deploy to DigitalOcean
+    script: "$TRAVIS_BUILD_DIR/vendor/bin/phpunit"
   - stage: push
     if: branch = master AND type = push
     before_script:
@@ -31,5 +25,4 @@ jobs:
     - chmod 600 ./deploy_key
     - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
     - ssh-add ./deploy_key
-    - ssh -i ./deploy_key git@$SERVER_IP_ADDRESS pwd
-    script: ./release.sh
+    script: "./release.sh"

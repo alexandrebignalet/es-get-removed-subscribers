@@ -1,15 +1,39 @@
 #!/bin/bash
 
-ssh -T -i ./deploy_key git@${SERVER_IP_ADDRESS} <<EOF
-  echo "Deleting existing project"
-  rm -rf es-get-removed-subscribers/
+SERVICE_NAME="es-get-removed-subs"
+APP_VERSION="${TRAVIS_BUILD_NUMBER:-local}"
+DOCKER_IMAGE="${SERVICE_NAME}:${APP_VERSION}"
 
-  git clone https://github.com/alexandrebignalet/es-get-removed-subscribers.git
+docker build -t "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}" .
 
-  echo "Getting in the cloned project"
-  cd es-get-removed-subscribers/
+echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+docker push "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
 
-  echo "Building and running the container"
-  docker-compose build
-  docker-compose up --no-deps -d
+ssh -T -i ./deploy_key git@"${SERVER_IP_ADDRESS}" <<EOF
+  echo '>>> Pulling latest version'
+  docker pull "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
+
+  echo '>>> Get old container id'
+  CID="$(sudo docker ps | grep "${SERVICE_NAME}" | awk '{print $1}')"
+  echo $CID
+
+  echo '>>> Stopping old container'
+  if [ "$CID" != "" ];
+  then
+    sudo docker stop $CID
+  fi
+
+  echo '>>> Recreate the container'
+  docker run -d "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
+
+  echo '>>> Cleaning up containers'
+  sudo docker ps -a | grep "Exit" | awk '{print $1}' | while read -r id ; do
+    sudo docker rm $id
+  done
+
+
+  echo '>>> Cleaning up images'
+  sudo docker images | grep "^<none>" | head -n 1 | awk 'BEGIN { FS = "[ \t]+" } { print $3 }'  | while read -r id ; do
+    sudo docker rmi $id
+  done
 EOF
