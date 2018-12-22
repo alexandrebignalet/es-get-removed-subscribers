@@ -10,6 +10,8 @@ echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdi
 docker push "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
 
 ssh -T -i ./deploy_key git@"${SERVER_IP_ADDRESS}" <<EOF
+  echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
   echo '>>> Pulling latest version'
   docker pull "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
 
