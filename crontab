@@ -1,2 +1,2 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-0 2 * * * /usr/local/bin/php /home/expertsender/get-removed-subscribers/bin/console removed-subscribers:csv:send -k npqHSIjt2l9enlHf2ZLk --customer-name acheterlouer -p acheterlouer >> /home/expertsender/get-removed-subscribers/logs/get-removed-subscribers.log
+0 2 * * * /usr/local/bin/php /home/expertsender/get-removed-subscribers/bin/console removed-subscribers:csv:send -i $FTP_SERVER_HOST -u $FTP_USERNAME -p $FTP_PASSWORD -k $ACHETER_LOUER_KEY -c acheterlouer -a acheterlouer >> /home/expertsender/get-removed-subscribers/logs/get-removed-subscribers.log

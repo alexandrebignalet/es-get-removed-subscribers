@@ -9,7 +9,7 @@ docker build -t "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}" .
 echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 docker push "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
 
-ssh -T -i ./deploy_key git@"${SERVER_IP_ADDRESS}" <<EOF
+ssh -T -i ./deploy_key git@"${SERVER_IP}" <<EOF
   echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
   echo '>>> Pulling latest version'
@@ -26,7 +26,7 @@ ssh -T -i ./deploy_key git@"${SERVER_IP_ADDRESS}" <<EOF
   fi
 
   echo '>>> Recreate the container'
-  docker run -d "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
+  docker run -d -e FTP_SERVER_HOST="${FTP_SERVER_HOST}" -e FTP_USERNAME="${FTP_USERNAME}" -e FTP_PASSWORD="${FTP_PASSWORD}" -e ACHETER_LOUER_KEY="${ACHETER_LOUER_KEY}" "${DOCKER_USERNAME}"/"${DOCKER_IMAGE}"
 
   echo '>>> Cleaning up containers'
   sudo docker ps -a | grep "Exit" | awk '{print $1}' | while read -r id ; do

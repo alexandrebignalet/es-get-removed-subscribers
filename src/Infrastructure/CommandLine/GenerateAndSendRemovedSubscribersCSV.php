@@ -25,11 +25,14 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
             ->setDefinition(
                 new InputDefinition([
                     new InputOption("api-key", "k", InputOption::VALUE_REQUIRED, "The customer ES api key."),
-                    new InputOption("customer-name", "cn", InputOption::VALUE_REQUIRED, "The name of the customer responsible."),
-                    new InputOption("path", "p", InputOption::VALUE_OPTIONAL, "The path storage on the FTP server."),
-                    new InputOption("rejection-reasons", "rr", InputOption::VALUE_OPTIONAL, "The rejection reasons to match."),
-                    new InputOption("start-date", "sd", InputOption::VALUE_OPTIONAL, "From when start fetching."),
-                    new InputOption("end-date", "ed", InputOption::VALUE_OPTIONAL, "To when end fetching.")
+                    new InputOption("ftp-ip", "i", InputOption::VALUE_REQUIRED, "TThe FTP server IP to put the generated file."),
+                    new InputOption("ftp-username", "u", InputOption::VALUE_REQUIRED, "An username granted into the FTP server."),
+                    new InputOption("ftp-password", "p", InputOption::VALUE_REQUIRED, "The password of the corresponding username."),
+                    new InputOption("customer-name", "c", InputOption::VALUE_REQUIRED, "The name of the customer responsible."),
+                    new InputOption("path", "a", InputOption::VALUE_OPTIONAL, "The path storage on the FTP server."),
+                    new InputOption("rejection-reasons", "r", InputOption::VALUE_OPTIONAL, "The rejection reasons to match."),
+                    new InputOption("start-date", "s", InputOption::VALUE_OPTIONAL, "From when start fetching."),
+                    new InputOption("end-date", "e", InputOption::VALUE_OPTIONAL, "To when end fetching.")
                 ])
             );
     }
@@ -38,7 +41,11 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
     {
         try {
             $apiKey = $input->getOption("api-key");
-            $handler = $this->createHandler($apiKey);
+            $ftpIp = $input->getOption("ftp-ip");
+            $ftpUsername = $input->getOption("ftp-username");
+            $ftpPassword = $input->getOption("ftp-password");
+
+            $handler = $this->createHandler($apiKey, $ftpIp, $ftpUsername, $ftpPassword);
 
             $command = $this->deserializeInput($input);
 
@@ -50,10 +57,11 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
 
             $output->writeln("Done. \n ******************* \n");
 
+            return 0;
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
             $output->writeln("Existing due to error...");
-            exit;
+            return 1;
         }
     }
 
@@ -73,15 +81,11 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
      * @return CreateRemovedSubscribersCSVCommandHandler
      * @throws \ErrorException
      */
-    private function createHandler($apiKey)
+    private function createHandler($apiKey, $ftpIp, $ftpUsername, $ftpPassword)
     {
-        $ftp_ip = "ftp.cluster021.hosting.ovh.net";
-        $username = "expertsegb-alex";
-        $password = "UhJ746YHr4";
-
         $httpClient = new Client();
         $esApiClient = new ExpertSenderApiClient($httpClient, $apiKey);
-        $ftpClient = new FTPClient($ftp_ip, $username, $password);
+        $ftpClient = new FTPClient($ftpIp, $ftpUsername, $ftpPassword);
         $csvWriter = new CSVWriter();
         $removedSubscribersService = new RemovedSubscriberService($esApiClient);
         return new CreateRemovedSubscribersCSVCommandHandler($removedSubscribersService, $ftpClient, $csvWriter);
