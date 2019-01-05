@@ -5,6 +5,12 @@ namespace App\Domain;
 
 final class RemovedSubscriber {
 
+    /**
+     * @param $removedSubscriberXml
+     * @param $rejectionReason
+     * @return RemovedSubscriber
+     * @throws \Exception
+     */
     public static function of($removedSubscriberXml, $rejectionReason) {
         $nodeValue = function($nodeName) use ($removedSubscriberXml) {
             return ((array) $removedSubscriberXml->$nodeName)[0];
@@ -13,7 +19,7 @@ final class RemovedSubscriber {
         $id = $nodeValue('Id');
         $email = $nodeValue('Email');
         $listId = $nodeValue('ListId');
-        $unsubscribedOn = new \DateTime($nodeValue('UnsubscribedOn'));
+        $unsubscribedOn = new \DateTimeImmutable($nodeValue('UnsubscribedOn'));
 
         return new RemovedSubscriber($id, $email, $listId, $unsubscribedOn, [$rejectionReason]);
     }
@@ -29,7 +35,7 @@ final class RemovedSubscriber {
     private $id;
     private $email;
     private $listId;
-    /** @var \DateTime */
+    /** @var \DateTimeImmutable */
     private $unsubscribedOn;
     /** @var string[] */
     private $rejectionReasons;
@@ -69,7 +75,7 @@ final class RemovedSubscriber {
     /**
      * @return mixed
      */
-    public function getUnsubscribedOn(): \DateTime
+    public function getUnsubscribedOn(): \DateTimeImmutable
     {
         return $this->unsubscribedOn;
     }

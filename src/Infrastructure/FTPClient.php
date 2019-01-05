@@ -69,7 +69,7 @@ class FTPClient {
 
         $existingRemoveSubscribers = array_map(function ($row) {
             $args = preg_split('/,/', $row);
-            return new RemovedSubscriber(null, $args[1], null, \DateTime::createFromFormat('d/m/Y', $args[0]), preg_split('/,/', $args[2]));
+            return new RemovedSubscriber(null, $args[1], null, \DateTimeImmutable::createFromFormat('d/m/Y', $args[0]), preg_split('/,/', $args[2]));
         }, $csvRows);
 
         return $existingRemoveSubscribers;

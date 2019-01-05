@@ -13,13 +13,13 @@ class RemovedSubscribersServiceTest extends TestCase {
 
     public function testShouldGatherRemovedSubscribersUnifyingReasons() {
         $removedSubscribersOptOutLink = [
-            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['OptOutLink'])
+            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTimeImmutable('yesterday'), ['OptOutLink'])
         ];
         $removedSubscribersUi = [
-            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['Ui']),
+            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTimeImmutable('yesterday'), ['Ui']),
         ];
         $removedSubscribersComplaint = [
-            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['Complaint'])
+            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTimeImmutable('yesterday'), ['Complaint'])
         ];
 
         $apiClientStub = $this->createMock(ExpertSenderApiClient::class);
@@ -37,7 +37,7 @@ class RemovedSubscribersServiceTest extends TestCase {
         $removedSubscribers = $removedSubscriberService->getRemovedSubscribers();
 
         $this->assertEquals(count($removedSubscribers), 1);
-        $expectedRemovedSub = new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['Complaint', 'Ui', 'OptOutLink']);
+        $expectedRemovedSub = new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTimeImmutable('yesterday'), ['Complaint', 'Ui', 'OptOutLink']);
         $actualRemovedSubscriber = reset($removedSubscribers);
         $this->assertTrue($actualRemovedSubscriber == $expectedRemovedSub);
     }

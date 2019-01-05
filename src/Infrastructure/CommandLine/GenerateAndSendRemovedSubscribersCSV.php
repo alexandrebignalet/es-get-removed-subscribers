@@ -37,14 +37,14 @@ class GenerateAndSendRemovedSubscribersCSV extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $today = (new \DateTimeImmutable())->format("Y-m-d H:m:s");
-            $output->writeln("Generation of the ".$today.""."");
-
-
             $apiKey = $input->getOption("api-key");
             $handler = $this->createHandler($apiKey);
 
             $command = $this->deserializeInput($input);
+
+            $generationDate = $command->startDate() ?: new \DateTimeImmutable( "now");
+            $output->writeln("Generation of the ".$generationDate->format("Y-m-d H:m:s").""."");
+
             $handler->handle($command);
 
 

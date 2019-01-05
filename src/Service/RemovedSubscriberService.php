@@ -11,8 +11,8 @@ class RemovedSubscriberService {
 
     /**
      * @param array $rejectionReasons
-     * @param \DateTime $startDate
-     * @param \DateTime $endDate
+     * @param \DateTimeImmutable $startDate
+     * @param \DateTimeImmutable $endDate
      * @return array
      * @throws \Exception
      */

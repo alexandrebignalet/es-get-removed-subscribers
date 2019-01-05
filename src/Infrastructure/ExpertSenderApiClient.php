@@ -5,7 +5,6 @@ namespace App\Infrastructure;
 
 use App\Domain\RemovedSubscriber;
 use GuzzleHttp\Client;
-use SimpleXMLElement;
 
 class ExpertSenderApiClient {
 
@@ -40,17 +39,19 @@ class ExpertSenderApiClient {
             'query' => $queryParams
         ]);
 
-        $removedSubscribersXmlArray = $response->xml()->Data->RemovedSubscribers;
+        $removedSubscribersXmlArray = $response->xml()->Data->RemovedSubscribers->RemovedSubscriber;
 
-        $xmlResources = $this->xmlToArray($removedSubscribersXmlArray);
-
-        return array_key_exists($resourceName, $xmlResources) ? $xmlResources[$resourceName] : [];
+        return $this->xmlToArray($removedSubscribersXmlArray);
     }
 
-    private function xmlToArray($xmlObject): array {
-        return array_map(function($node) {
-            return is_object($node) ? $this->xmlToArray($node) : $node;
-        }, (array) $xmlObject);
+    private function xmlToArray(\SimpleXMLElement $xmlObject): array {
+        $removedSubscribersXml = [];
+
+        foreach ($xmlObject as $removedSubscriberXml) {
+            $removedSubscribersXml[] = $removedSubscriberXml;
+        }
+
+        return $removedSubscribersXml;
     }
 
     public function __construct(Client $httpClient, string $apiKey) {

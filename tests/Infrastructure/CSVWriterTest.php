@@ -38,10 +38,10 @@ final class CSVWriterTest extends TestCase {
 
     public function testShouldFormatRemovedSubscribersInCSVStringRecords() {
         $expectedHeaders = RemovedSubscriber::csvHeader();
-        $removedSubscriberAlexObj = new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['OptOutLink']);
+        $removedSubscriberAlexObj = new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTimeImmutable('yesterday'), ['OptOutLink']);
         $removedSubscribers = [
             $removedSubscriberAlexObj,
-            new RemovedSubscriber('2', 'alexandre@gmail.com', '5', new \DateTime('yesterday'), ['Ui'])
+            new RemovedSubscriber('2', 'alexandre@gmail.com', '5', new \DateTimeImmutable('yesterday'), ['Ui'])
         ];
 
         $csvWriter = new CSVWriter();
@@ -64,12 +64,12 @@ final class CSVWriterTest extends TestCase {
 
     public function testShouldCreateANewFileAccordingOnPathAndNameGiven() {
         $removedSubscribers = [
-            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTime('yesterday'), ['OptOutLink']),
-            new RemovedSubscriber('2', 'alexandre@gmail.com', '5', new \DateTime('yesterday'), ['Ui'])
+            new RemovedSubscriber('1', 'alex@gmail.com', '2', new \DateTimeImmutable('yesterday'), ['OptOutLink']),
+            new RemovedSubscriber('2', 'alexandre@gmail.com', '5', new \DateTimeImmutable('yesterday'), ['Ui'])
         ];
 
         $csvWriter = new CSVWriter();
-        $fileName = '' . 'acheterlouerremoved-' . (new \DateTime("now"))->format('dmY') . '.csv';
+        $fileName = '' . 'acheterlouerremoved-' . (new \DateTimeImmutable("now"))->format('dmY') . '.csv';
         $csvWriter->createFile($removedSubscribers, $fileName);
 
         $this->assertFileExists($fileName);
